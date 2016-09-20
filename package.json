@@ -6,10 +6,10 @@
   "author": "Andrey Mozolev",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:mozolev/amazing.git"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/mozolev/amazing/issues"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
@@ -48,7 +48,6 @@
   },
   "dependencies": {},
   "config": {
-    "ghPages": "",
     "directories": {
       "source": "./src",
       "build": "./build"

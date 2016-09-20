@@ -1,6 +1,4 @@
 (function(){
-  // var title = document.querySelector('.page-header__title');
-
   /**
    * Throttle
    * @param  {function} callback  Функция которую нужно оптимизировать
@@ -16,7 +14,8 @@
       }
     };
   }
-
+  var header = document.querySelector('.page-header');
+  header.style.height = window.innerHeight + 'px';
   /**
    * Проверка видимости элемента
    * @param  {HTMLElement} element  Элемент который проверяем
@@ -28,7 +27,6 @@
   }
 
   function moveHeadersElements() {
-    var header = document.querySelector('.page-header');
     var logoElement = document.querySelector('.page-header__logo');
     var titleElement = document.querySelector('.page-header__title');
     var textElement = document.querySelector('.page-header__text');

@@ -11,12 +11,12 @@
   background-color: $gray-dark-2
   color: $light
 
-  @media (min-width $sm)
+  @media (min-width: $sm)
     padding-top 80px
     padding-bottom 80px
     padding-left 20px
 
-  @media (min-width $md)
+  @media (min-width: $md)
     padding-top 135px
     padding-bottom 140px
     padding-left 60px
@@ -28,9 +28,12 @@
 
   &__text
     max-width 500px
-    font-size $fz--lg
+    font-size $fz--md
     font-weight: 300
     letter-spacing -0.025em
+
+    @media (min-width: $sm)
+      font-size: $fz--lg
 
   &__btn
     text-align: center

@@ -2,6 +2,7 @@
 
 @import '../../stylus/variables.styl';     // только для удобства обращения к переменным
 
+
 @keyframes logo-jump
   0%
     top 0
@@ -12,20 +13,22 @@
     left 15px
     opacity 1
 
+
 .page-header
-  max-height: 900px
   height 100vh
   padding-top 15px
   background-image: url('../img/bg-header.jpg')
   background-repeat no-repeat
-  background-attachment: fixed
-  background-position: 50% 0
+  background-position: right -55px top 0
   background-size: cover
 
-  @media (min-width: $screen-sm)
+  @media (min-width: $sm)
     padding-top 55px
-  @media (min-width: $screen-md)
+    background-position: right 0 top 0
+
+  @media (min-width: $md)
     padding-top 85px
+
 
   &__logo
     position: relative
@@ -43,6 +46,7 @@
     position: relative
     top 0
     font-size $fz--xlg
+    line-height $line-height
     font-weight: 300
     letter-spacing -0.025em
 

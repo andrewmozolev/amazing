@@ -7,12 +7,9 @@ var plumber      = require('gulp-plumber');
 var notify       = require('gulp-notify');
 var postcss      = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
-// var reporter     = require('postcss-reporter');
-// var syntax_scss  = require('postcss-scss');
 var flexboxfixer = require('postcss-flexboxfixer');
 var cssnano      = require('cssnano');
 var mqpacker     = require('css-mqpacker');
-// var stylelint    = require('stylelint');
 var sourcemaps   = require('gulp-sourcemaps');
 var newer        = require('gulp-newer');
 var rename       = require('gulp-rename');
@@ -22,13 +19,11 @@ var concat       = require('gulp-concat');
 var uglify       = require('gulp-uglify');
 var imagemin     = require('gulp-imagemin');
 var pngquant     = require('imagemin-pngquant');
-// var svgSprite    = require('gulp-svg-sprite');
 var fs           = require('fs'); // встроенный в node модуль, устанавливать не надо
 var foldero      = require('foldero'); // плагин
 var pug          = require('gulp-pug');
 var del          = require('del');
 var ghPages      = require('gulp-gh-pages');
-var dataPath     = 'src/pug/data'; // Где лежат файлы
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -41,16 +36,18 @@ var srcPath        = 'src/';
 
 
 
-
 /* ==============================
 =            DEPLOY             =
 ============================== */
 
-function deploy() {
-  console.log('deploy function');
-  return gulp.src('**/*', {cwd: buildPath})
-    .pipe(ghPages());
-}
+
+gulp.task('deploy', function(callback) {
+  if (isOnProduction) {
+    return gulp.src('**/*', {cwd: buildPath})
+      .pipe(ghPages());
+  }
+  callback();
+});
 
 /* =====  End of DEPLOY  ====== */
 
@@ -63,34 +60,6 @@ function deploy() {
 ============================ */
 
 gulp.task('pug', function() {
-  // В этой переменной копим данные
-  var siteData = {};
-
-  // Проверяем, есть ли по заданному пути папка
-  if (fs.existsSync(dataPath)) {
-
-    // Берем и пишем в siteData
-    siteData = foldero(dataPath, {
-      recurse: true,
-      whitelist: '(.*/)*.+\.(json)$', //... все json файлы
-      // Так обрабатываем каждый файл:
-      loader: function loadAsString(file) {
-        var json = {}; // Сюда будем писать значения
-        // Пробуем извлечь из файла json
-        try {
-          json = JSON.parse(fs.readFileSync(file, 'utf8'));
-        }
-        // Ругаемся, если в файле лежит плохой json
-        catch (e) {
-          console.log('Error Parsing JSON file: ' + file);
-          console.log('==== Details Below ====');
-          console.log(e);
-        }
-        // А если все ок, то добавляем его в siteData
-        return json;
-      }
-    });
-  }
   console.log('   ===============================================   ');
   console.log(' ====      Assembly .html files from .pug       ====  ');
   console.log('   ===============================================   ');
@@ -114,36 +83,6 @@ gulp.task('pug', function() {
 });
 
 /* =====  End of PUG  ====== */
-
-
-
-
-
-/*=======================================
-=              SVG-SPRITE               =
-=======================================*/
-
-// gulp.task('svg', function() {
-//   return gulp.src('**/*.svg', {cwd: path.join(srcPath, 'img/svg-sprite')})
-//   .pipe(svgSprite({
-//     mode: {
-//       symbol: {
-//         dest: '.',
-//         dimensions: '%s',
-//         sprite: buildPath + '/img/svg-sprite.svg',
-//         example: false,
-//         render: {scss: {dest: 'src/sass/_global/svg-sprite.scss'}}
-//       }
-//     },
-//     svg: {
-//       xmlDeclaration: false,
-//       doctypeDeclaration: false
-//     }
-//   }))
-//   .pipe(gulp.dest('./'));
-// });
-
-/*========  End of SVG-SPRITE  ========*/
 
 
 
@@ -204,36 +143,8 @@ gulp.task('js', function() {
 
 
 
-/* =================================
-=            STYLETEST           =
-================================= */
-
-// gulp.task('styletest', function() {
-//   var processors = [
-//   stylelint(),
-//   reporter({
-//     throwError: true
-//   })
-//   ];
-//   return gulp.src(['!src/sass/_global/svg-sprite.scss', 'src/sass/**/*.scss'])
-
-//   .pipe(plumber({
-//     errorHandler: notify.onError({
-//       message: 'Error: <%= error.message %>',
-//       sound: 'notwork'
-//     })
-//   }))
-//   .pipe(postcss(processors, {syntax: syntax_scss}));
-// });
-
-/* =====  End of STYLETEST  ====== */
-
-
-
-
-
 /*=================================
-=            Gulp SASS            =
+=            Gulp Style            =
 =================================*/
 
 gulp.task('style', function() {
@@ -262,7 +173,7 @@ gulp.task('style', function() {
   }));
 });
 
-/*=====  End of Gulp SASS  ======*/
+/*=====  End of Gulp Style  ======*/
 
 
 
@@ -336,12 +247,12 @@ gulp.task('build', gulp.series(
 
 
 
+
+/* ==============================
+=            SERVER             =
+============================== */
+
 gulp.task('server', function(callback) {
-  if (isOnProduction) {
-    console.log('--- deploy ---');
-    // deploy();
-    callback();
-  }
   if (!isOnProduction) {
     console.log('   ===============================================    ');
     console.log(' ====          Start server and watch           ====  ');
@@ -351,18 +262,11 @@ gulp.task('server', function(callback) {
     gulp.watch('**/*.styl', {cwd: path.join(srcPath, 'stylus')}, gulp.series('style'));
     gulp.watch('**/*.styl', {cwd: path.join(srcPath, 'modules')}, gulp.series('style'));
     gulp.watch('**/*.{pug,json}', {cwd: path.join(srcPath)}, gulp.series('pug', reloader));
-    // gulp.watch('**/*.{pug}', {cwd: path.join(srcPath, 'modules')}, gulp.series('pug', reloader));
     gulp.watch('**/*.{jpg,jpeg,gif,png,svg}', {cwd: path.join(srcPath, 'img')}, gulp.series('img', reloader));
-    gulp.watch('**/*.js', {cwd: path.join(srcPath, 'js')}, gulp.series('js', reloader));
     gulp.watch('**/*.js', {cwd: path.join(srcPath, 'modules')}, gulp.series('js', reloader));
-    // gulp.watch('**/*.svg', {cwd: path.join(srcPath, 'img/svg-sprite')}, ['svg', browserSync.reload]);
-    // gulp.watch(['**/*.*','!svg-sprite/**'], {cwd: path.join(srcPath, 'img')}, ['img', browserSync.reload]);
-    // gulp.watch('**/*.*', {cwd: path.join(srcPath, 'fonts')}, ['fonts', browserSync.reload]);
   }
+  callback();
 });
-
-
-/* =====  End of Start watch  ====== */
 
 function server() {
   browserSync.init({
@@ -376,10 +280,24 @@ function server() {
   });
 }
 
+/* =====  End of SERVER  ====== */
+
+
+
+
+
+/* ===============================
+=            DEFAULT             =
+=============================== */
+
 gulp.task('default', gulp.series(
   'build',
+  'deploy',
   'server'
 ));
+
+/* =====  End of DEFAULT  ====== */
+
 
 
 // Перезагрузка в браузере
