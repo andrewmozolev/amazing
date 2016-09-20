@@ -1,0 +1,26 @@
+// Для импорта в диспетчер подключений: @import '../../src/modules/photos/photos.styl';
+
+@import '../../stylus/variables.styl';     // только для удобства обращения к переменным
+
+
+.photos
+  display: block
+
+  &__link
+    position: relative
+    display: block
+    overflow hidden
+
+
+
+  &__img
+    position: relative
+    left 50%
+    width:auto;
+    height:100%;
+    margin:auto;
+    transform translateX(-50%)
+    transition all 0.3s
+
+    &:hover
+      transform translateX(-50%) scale(1.05)

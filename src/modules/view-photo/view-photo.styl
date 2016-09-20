@@ -1,0 +1,64 @@
+// Для импорта в диспетчер подключений: @import '../../src/modules/view-photo/view-photo.styl';
+
+@import '../../stylus/variables.styl';     // только для удобства обращения к переменным
+
+
+.view-photo
+  position relative
+  display: block
+  min-height 200px
+  background-color: $blue
+
+  &__content
+    padding-top 50px
+    padding-bottom 50px
+    padding-left 20px
+    padding-right 20px
+
+    @media(min-width $sm)
+      padding-left 0
+
+    @media (min-width $lg)
+      padding-top 120px
+      padding-bottom 115px
+
+  &__title
+    color: #fff
+    font-size: $fz--h2
+    text-transform: uppercase
+
+  &__text
+    font-size: $fz--h2
+    font-weight: 300
+    letter-spacing -0.025em
+    padding-right 50px
+    color: #fff
+
+    @media (min-width $sm)
+      font-size: $fz--lg
+
+  &__btn
+    text-align center
+
+    @media (min-width $sm)
+      text-align left
+
+  &__photo
+    padding-bottom 50%
+    background-image: url("../img/img-photo-5.jpg")
+    background-repeat: no-repeat
+    background-position: center
+    background-attachment: fixed;
+    background-size: cover
+
+    @media (min-width $sm)
+      position: absolute
+      padding-bottom 0
+      top 0
+      bottom 0
+      left 50%
+      width 50%
+      background-attachment: scroll;
+
+    @media (min-width $md)
+      width 25%

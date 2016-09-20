@@ -1,0 +1,107 @@
+// Для импорта в диспетчер подключений: @import '../../src/modules/navigation/navigation.styl';
+
+@import '../../stylus/variables.styl';     // только для удобства обращения к переменным
+
+
+.navigation
+  display: block
+  position relative
+
+  &__burger
+    position: absolute
+    z-index 10
+    top 22px
+    right 26px
+    height 23px
+    width 26px
+    cursor: pointer
+
+    span
+      position: absolute
+      top 10px
+      left 0
+      height 4px
+      width 100%
+      background-color: $gray-dark
+      transition all 0.3s
+
+      &::after,
+      &::before
+        content: ''
+        position: absolute
+        top -8px
+        left 0
+        display block
+        height 4px
+        width 100%
+        background-color: $gray-dark
+        transition all 0.3s
+
+      &::before
+        top auto
+        bottom -8px
+
+    &:hover
+      span
+        background-color $gray-light
+
+        &::before,
+        &::after
+          background-color: $gray-light
+
+      .navigation__title
+        color: $gray-light
+
+  &__title
+    position: absolute
+    top calc(100% + 10px)
+    left 50%
+    display block
+    margin: 0
+    font-size $fz--xs
+    line-height: 1
+    transform translateX(-50%)
+    text-transform: uppercase
+    color: $gray-dark
+    transition all 0.3s
+
+  &__list
+    position: absolute
+    z-index 1000
+    top 22px
+    right 80px
+    display: none
+    margin: 0
+    padding: 0
+    list-style: none
+    background-color: #fff
+
+  &__item
+    position: relative
+    margin: 0
+    transition all 0.3s
+
+    &::after
+      content: ''
+      position: absolute
+      bottom 0
+      left 0
+      width 100%
+      height 2px
+      background-color: $gray-lighten
+      transition all 0.3s
+
+    &:hover
+      background-color: $gray-lighten
+
+      &::after
+        background-color: $gray-light
+
+  &__link
+    display: block
+    padding 10px 30px
+    text-transform: uppercase
+    color: $gray-dark
+
+    &:hover
+      text-decoration: none
